@@ -191,11 +191,13 @@ def main():
                     techs = details['implies']
                 elif isinstance(details['implies'], str):
                     techs = [details['implies']]
-                    for tech in techs:
-                        subcats = wappalyzer_names[tech]
-                        for subcat in subcats:
-                            subcat_category = wappalyzer_categories[str(subcat)]['name']
-                            saved_apps[subcat_category].add(tech)
+                else:
+                    techs = []
+                for tech in techs:
+                    subcats = wappalyzer_names[tech]
+                    for subcat in subcats:
+                        subcat_category = wappalyzer_categories[str(subcat)]['name']
+                        saved_apps[subcat_category].add(tech)
         except re.error:
             # print(warn(f'regex error: {regex}'))
             pass
