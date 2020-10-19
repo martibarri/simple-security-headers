@@ -66,6 +66,8 @@ def main():
     html = response.text
     soup = BeautifulSoup(html, "lxml")
 
+    wappalyzer_json_url = "https://raw.githubusercontent.com/AliasIO/wappalyzer/master/src/technologies.json"
+
     check_headers = [
         'X-Content-Type-Options',
         'X-Frame-Options',
@@ -128,13 +130,11 @@ def main():
 
     # Prepare wappalyzer data
     saved_apps = {}
-    wappalyzer_categories = json.loads(requests.get(
-        'https://raw.githubusercontent.com/AliasIO/Wappalyzer/master/src/apps.json').text)['categories']
+    wappalyzer_categories = json.loads(requests.get(wappalyzer_json_url).text)['categories']
     for k, v in wappalyzer_categories.items():
         name = wappalyzer_categories[k]['name']
         saved_apps[name] = set()
-    wappalyzer_tech = json.loads(requests.get(
-        'https://raw.githubusercontent.com/AliasIO/Wappalyzer/master/src/apps.json').text)['apps']
+    wappalyzer_tech = json.loads(requests.get(wappalyzer_json_url).text)['technologies']
     wappalyzer_names = {}
     for app_name, details in wappalyzer_tech.items():
         wappalyzer_names[app_name] = set()
