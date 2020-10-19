@@ -129,12 +129,24 @@ def main():
     print(f"\n{run(bold('Checking Wappalyzer Regular Expressions...'))}")
 
     # Prepare wappalyzer data
+    wappalyzer_json_file = requests.get(wappalyzer_json_url)
+    if wappalyzer_json_file.ok:
+        try:
+            wappalyzer_json = json.loads(wappalyzer_json_file.text)
+        except json.decoder.JSONDecodeError as e:
+            print(bold(bad(f"{bold(red('JSONDecodeError'))}: {e}")))
+            exit()
+    else:
+        print(bold(bad(f"{bold(red(f'Unable to get wappalyzer json file {wappalyzer_json_url}'))}")))
+        exit()
+
+    wappalyzer_categories = wappalyzer_json['categories']
     saved_apps = {}
-    wappalyzer_categories = json.loads(requests.get(wappalyzer_json_url).text)['categories']
     for k, v in wappalyzer_categories.items():
         name = wappalyzer_categories[k]['name']
         saved_apps[name] = set()
-    wappalyzer_tech = json.loads(requests.get(wappalyzer_json_url).text)['technologies']
+
+    wappalyzer_tech = wappalyzer_json['technologies']
     wappalyzer_names = {}
     for app_name, details in wappalyzer_tech.items():
         wappalyzer_names[app_name] = set()
